@@ -1,0 +1,30 @@
+# acrobox.io/docs v0.0.0-20211106045106-83309ad0742c
+## explicit
+acrobox.io/docs
+# github.com/pnelson/cli v0.0.0-20211031084837-a538676e703b
+## explicit
+github.com/pnelson/cli
+# golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
+## explicit
+golang.org/x/crypto/blowfish
+golang.org/x/crypto/chacha20
+golang.org/x/crypto/curve25519
+golang.org/x/crypto/curve25519/internal/field
+golang.org/x/crypto/ed25519
+golang.org/x/crypto/ed25519/internal/edwards25519
+golang.org/x/crypto/internal/poly1305
+golang.org/x/crypto/internal/subtle
+golang.org/x/crypto/ssh
+golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
+golang.org/x/crypto/ssh/knownhosts
+golang.org/x/crypto/ssh/terminal
+# golang.org/x/sys v0.0.0-20211106132015-ebca88c72f68
+## explicit
+golang.org/x/sys/cpu
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/plan9
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
+## explicit
+golang.org/x/term
