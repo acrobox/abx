@@ -17,6 +17,17 @@ created for each machine and the SSH server has been configured to only allow
 non-root public key connections. Strict host key verification is enforced for
 all connections.
 
+## Networking
+
+Containers run in a user-defined bridge network, limiting the scope in which
+containers can communicate.
+
+## Permissions
+
+Containers run as a non-root user, limiting the scope of permissions the
+container has on the machine. The tedious details of file system permissions
+for application data has already been taken care of.
+
 ## Disclosure
 
 I take security very seriously, but no system is perfect. Please report flaws

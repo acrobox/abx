@@ -1,6 +1,6 @@
 # abx add
 
-Usage: `abx add [OPTIONS] NAME IMAGE [COMMAND ...]`
+Usage: `abx add [OPTIONS] NAME IMAGE [COMMAND] [ARGS...]`
 
 Configure a new container on the machine.
 

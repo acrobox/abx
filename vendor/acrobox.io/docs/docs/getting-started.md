@@ -1,7 +1,7 @@
 # Getting Started
 
 Sign up at acrobox.io and generate an access token. If you've previously
-generated one and didn't record it then navigate to back to your account page
+generated one and didn't record it then navigate back to your account page
 and regenerate the token. Set the `ACROBOX_TOKEN` environment variable on your
 machine to this value.
 
@@ -41,16 +41,18 @@ If you use the `www` or naked domain, you need the following records, where
 `IPv4` is replaced by the IPv4 address of the machine from `abx status`. The
 Acrobox reverse proxy will take care of the redirects between them.
 
-| Type | Name | Content |
-|------| ---- | ------- |
-| A    | @    | *IPv4*  |
-| A    | www  | *IPv4*  |
+| Type | Name | Content                 |
+| ---- | ---- | ----------------------- |
+| A    | @    | *IPv4*                  |
+| A    | www  | *IPv4*                  |
+| CAA  | @    | 0 issue letsencrypt.org |
 
-If you use a subdomain, you only need one record:
+If you use a subdomain, you only need one A record:
 
-| Type | Name | Content |
-|------| ---- | ------- |
-| A    | sub  | *IPv4*  |
+| Type | Name | Content                 |
+| ---- | ---- | ----------------------- |
+| A    | sub  | *IPv4*                  |
+| CAA  | @    | 0 issue letsencrypt.org |
 
 These records may take a while to fully propagate across the internet. You can
 do a quick check by running `dig +short example.com` replacing `example.com`

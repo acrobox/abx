@@ -15,7 +15,7 @@ The host directory `/acrobox/IMAGE` will be mounted to `/data` on the container
 with `acrobox` user permissions, where `IMAGE` is the image name previously
 configured by `abx add`.
 
-For example, if the image name was `namespace/image`, the host directory
+For example, if `IMAGE` is `namespace/image` then the host directory
 `/acrobox/namespace/image` will be mounted to `/data` on the container.
 
 Note that the directory is named using the underlying image name, not the
