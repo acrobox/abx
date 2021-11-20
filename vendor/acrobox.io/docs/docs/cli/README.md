@@ -73,6 +73,8 @@ Errors yield a non-zero exit status.
 
 `logs` displays container logs.
 
+`run` runs a one-off non-scheduled task.
+
 `stop` stops a container.
 
 `start` starts a stopped container.

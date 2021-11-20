@@ -141,6 +141,7 @@ func Run(config *Config) error {
 		"remove",
 		"list",
 		"show",
+		"run",
 		"stop",
 		"start",
 		"reload",
