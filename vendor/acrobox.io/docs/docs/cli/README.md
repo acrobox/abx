@@ -49,6 +49,8 @@ Errors yield a non-zero exit status.
 
 `db/create` creates a new database.
 
+`db/backup` extracts a database to a PostgreSQL archive file.
+
 `db/destroy` destroys an existing database.
 
 `psql` proxies to psql on the machine.

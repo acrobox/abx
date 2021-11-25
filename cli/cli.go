@@ -126,6 +126,7 @@ func Run(config *Config) error {
 	commands := []string{
 		"db/list",
 		"db/create",
+		"db/backup",
 		"db/destroy",
 		"backup",
 		"update",
