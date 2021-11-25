@@ -127,6 +127,7 @@ func Run(config *Config) error {
 		"db/list",
 		"db/create",
 		"db/backup",
+		"db/restore",
 		"db/destroy",
 		"backup",
 		"update",
