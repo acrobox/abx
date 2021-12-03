@@ -1,11 +1,8 @@
 package cli
 
 import (
-	"bytes"
+	"crypto/ed25519"
 	"crypto/rand"
-	"crypto/rsa"
-	"crypto/x509"
-	"encoding/pem"
 	"errors"
 	"io/ioutil"
 	"net"
@@ -99,7 +96,7 @@ func (c *client) getKnownHosts() (ssh.HostKeyCallback, error) {
 }
 
 func (c *client) getPrivateKey() (ssh.Signer, error) {
-	filename := filepath.Join(c.config.Home, c.flags.host, "id_rsa")
+	filename := filepath.Join(c.config.Home, c.flags.host, "id_ed25519")
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -107,10 +104,10 @@ func (c *client) getPrivateKey() (ssh.Signer, error) {
 	return ssh.ParsePrivateKey(b)
 }
 
-// newKeyPair returns a PEM-encoded RSA private key
+// newKeyPair returns a OpenSSH-encoded Ed25519 private key
 // and its corresponding public SSH authorized key.
 func newKeyPair() ([]byte, []byte, error) {
-	priv, err := rsa.GenerateKey(rand.Reader, keySize)
+	pub, priv, err := ed25519.GenerateKey(rand.Reader)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -118,26 +115,12 @@ func newKeyPair() ([]byte, []byte, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	pub, err := ssh.NewPublicKey(&priv.PublicKey)
+	publicKey, err := ssh.NewPublicKey(pub)
 	if err != nil {
 		return nil, nil, err
 	}
-	authorizedKey := ssh.MarshalAuthorizedKey(pub)
+	authorizedKey := ssh.MarshalAuthorizedKey(publicKey)
 	return privateKey, authorizedKey, nil
-}
-
-// encodePrivateKey returns the PEM-encoded RSA private key.
-func encodePrivateKey(priv *rsa.PrivateKey) ([]byte, error) {
-	var buf bytes.Buffer
-	block := &pem.Block{
-		Type:  "RSA PRIVATE KEY",
-		Bytes: x509.MarshalPKCS1PrivateKey(priv),
-	}
-	err := pem.Encode(&buf, block)
-	if err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
 }
 
 // getString returns a space-trimmed string from the filename.

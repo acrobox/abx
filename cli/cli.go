@@ -243,12 +243,12 @@ func (c *client) init(args []string) error {
 		c.step(colorERR, "%v", err)
 		return cli.ErrExitFailure
 	}
-	err = c.writeKey("id_rsa", privateKey)
+	err = c.writeKey("id_ed25519", privateKey)
 	if err != nil {
 		c.step(colorERR, "%v", err)
 		return cli.ErrExitFailure
 	}
-	err = c.writeKey("id_rsa.pub", authorizedKey)
+	err = c.writeKey("id_ed25519.pub", authorizedKey)
 	if err != nil {
 		c.step(colorERR, "%v", err)
 		return cli.ErrExitFailure
@@ -600,7 +600,7 @@ func (c *client) databaseInfo(args []string) error {
 	if err != nil {
 		return err
 	}
-	keyFile := filepath.Join(c.config.Home, c.flags.host, "id_rsa")
+	keyFile := filepath.Join(c.config.Home, c.flags.host, "id_ed25519")
 	c.cli.Printf("Host           %s\n", ipv4)
 	c.cli.Printf("Username       %s\n", username)
 	c.cli.Printf("Password       %s\n", strings.TrimSpace(string(password)))

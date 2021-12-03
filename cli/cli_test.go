@@ -45,7 +45,7 @@ func TestInit(t *testing.T) {
 	if os.IsNotExist(err) {
 		t.Fatalf("host data directory '%s' should exist", dir)
 	}
-	filenames := []string{"IPv4", "known_hosts", "id_rsa", "id_rsa.pub"}
+	filenames := []string{"IPv4", "known_hosts", "id_ed25519", "id_ed25519.pub"}
 	for _, name := range filenames {
 		filename := filepath.Join(dir, name)
 		_, err = os.Stat(filename)

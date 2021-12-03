@@ -15,7 +15,7 @@ func newTestSSH(t *testing.T, home string, privateHostKey ssh.Signer) string {
 	t.Helper()
 	config := &ssh.ServerConfig{
 		PublicKeyCallback: func(c ssh.ConnMetadata, pub ssh.PublicKey) (*ssh.Permissions, error) {
-			filename := filepath.Join(home, username, "id_rsa.pub")
+			filename := filepath.Join(home, username, "id_ed25519.pub")
 			publicKey, err := getString(filename)
 			if err != nil {
 				return nil, errors.New("unauthorized")
