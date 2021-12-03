@@ -1,10 +1,10 @@
-# acrobox.io/docs v0.0.0-20211125102430-f8f54702094c
+# acrobox.io/docs v0.0.0-20211203135911-f756981da295
 ## explicit
 acrobox.io/docs
 # github.com/pnelson/cli v0.0.0-20211031084837-a538676e703b
 ## explicit
 github.com/pnelson/cli
-# golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
+# golang.org/x/crypto v0.0.0-20211202192323-5770296d904e
 ## explicit
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/chacha20
@@ -18,7 +18,7 @@ golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
 golang.org/x/crypto/ssh/knownhosts
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/sys v0.0.0-20211106132015-ebca88c72f68
+# golang.org/x/sys v0.0.0-20211124211545-fe61309f8881
 ## explicit
 golang.org/x/sys/cpu
 golang.org/x/sys/internal/unsafeheader

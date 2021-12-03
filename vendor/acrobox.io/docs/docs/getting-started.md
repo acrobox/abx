@@ -6,7 +6,7 @@ and regenerate the token. Set the `ACROBOX_TOKEN` environment variable on your
 machine to this value.
 
 ```sh
-export ACROBOX_TOKEN="hunter2"
+$ export ACROBOX_TOKEN="hunter2"
 ```
 
 Initialize a new Acrobox machine. This may take a few minutes, particularly
