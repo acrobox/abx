@@ -61,6 +61,8 @@ Errors yield a non-zero exit status.
 
 `backup` triggers a manual backup.
 
+`restore` restores from backups.
+
 `update` triggers a manual update.
 
 ### Containers

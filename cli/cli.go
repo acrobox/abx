@@ -123,6 +123,9 @@ func Run(config *Config) error {
 	c.cli.Add("db/info", c.databaseInfo, nil)
 	c.cli.Add("psql", c.psql, nil, cli.Proxy())
 	c.cli.Add("redis-cli", c.redisCLI, nil, cli.Proxy())
+	c.cli.Add("restore", c.restore, []*cli.Flag{
+		cli.NewFlag("force", &c.flags.restore.force, cli.Bool(), cli.ShortFlag("f")),
+	})
 	commands := []string{
 		"db/list",
 		"db/create",
@@ -616,6 +619,31 @@ func (c *client) psql(args []string) error {
 func (c *client) redisCLI(args []string) error {
 	args = append([]string{"exec", "-i", "-t", "-u", "redis", "redis", "redis-cli"}, args...)
 	return c.exec("docker", args...)
+}
+
+func (c *client) restore(args []string) error {
+	if !c.flags.restore.force {
+		c.cli.Printf("Confirmation to restore machine '%s' is required.\n", c.flags.host)
+		c.cli.Printf("  This action has the potential to overwrite data with old data.\n")
+		c.cli.Printf("  This action cannot be undone.\n")
+		err := c.promptToAgree()
+		if err != nil {
+			return err
+		}
+	}
+	args = append([]string{"exec", "acroboxd", "acroboxd", "restore"}, args...)
+	stdout, stderr, err := c.run("docker", args...)
+	if err != nil {
+		c.cli.Errorf("%s\n", stderr)
+		return cli.ErrExitFailure
+	}
+	data := make(map[string]string)
+	err = json.Unmarshal(stdout, &data)
+	if err != nil {
+		return err
+	}
+	containerID := strings.TrimSpace(string(data["container_id"]))
+	return c.exec("docker", "logs", "-f", containerID)
 }
 
 func (c *client) deploy(args []string) error {

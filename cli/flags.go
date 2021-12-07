@@ -14,6 +14,7 @@ type flags struct {
 	renew   flagsRenew
 	destroy flagsDestroy
 	status  flagsStatus
+	restore flagsRestore
 }
 
 // flagsInit represents the flags for initializing a new machine.
@@ -48,6 +49,11 @@ type flagsDestroy struct {
 // flagsStatus represents the flags for machine status.
 type flagsStatus struct {
 	format string
+}
+
+// flagsRestore represents the flags for restoring a machine.
+type flagsRestore struct {
+	force bool
 }
 
 // flagInt represents an integer flag.

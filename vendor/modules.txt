@@ -1,4 +1,4 @@
-# acrobox.io/docs v0.0.0-20211203135911-f756981da295
+# acrobox.io/docs v0.0.0-20211207034458-23ee7fe4abca
 ## explicit
 acrobox.io/docs
 # github.com/pnelson/cli v0.0.0-20211031084837-a538676e703b
