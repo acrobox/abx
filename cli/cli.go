@@ -339,7 +339,7 @@ func (c *client) destroy(args []string) error {
 
 func (c *client) ssh(args []string) error {
 	if len(args) > 0 {
-		return c.exec("", args)
+		return c.exec(args[0], args[1:]...)
 	}
 	session, err := c.newSession()
 	if err != nil {
@@ -394,7 +394,7 @@ func (c *client) push(args []string) error {
 	}
 	target := args[len(args)-1]
 	source := args[:len(args)-1]
-	fileType, _, err := c.run("stat -L -c %F " + target)
+	fileType, _, err := c.run("stat", "-L", "-c", "%F", target)
 	if err != nil {
 		serr, ok := err.(*ssh.ExitError)
 		if !ok || serr.ExitStatus() != 1 {
@@ -436,7 +436,7 @@ func (c *client) pushOne(source, target string, targetIsDir bool) error {
 	if targetIsDir {
 		filename = filepath.Join(target, fi.Name())
 	}
-	_, _, err = c.runWithStdin(f, "cat > "+filename)
+	_, _, err = c.runWithStdin(f, "sh", "-c", "cat > "+filename)
 	return err
 }
 
@@ -452,7 +452,7 @@ func (c *client) pushDir(source, target string) error {
 			if filename == target {
 				return nil
 			}
-			_, _, err = c.run("mkdir " + filename)
+			_, _, err = c.run("mkdir", filename)
 			return err
 		}
 		f, err := os.Open(path)
@@ -460,7 +460,7 @@ func (c *client) pushDir(source, target string) error {
 			return err
 		}
 		defer f.Close()
-		_, _, err = c.runWithStdin(f, "cat > "+filename)
+		_, _, err = c.runWithStdin(f, "sh", "-c", "cat > "+filename)
 		return err
 	}
 	return filepath.Walk(source, fn)
@@ -492,7 +492,7 @@ func (c *client) pull(args []string) error {
 }
 
 func (c *client) pullOne(source, target string) error {
-	fileType, _, err := c.run("stat -L -c %F " + source)
+	fileType, _, err := c.run("stat", "-L", "-c", "%F", source)
 	if err != nil {
 		serr, ok := err.(*ssh.ExitError)
 		if !ok || serr.ExitStatus() != 1 {
@@ -505,7 +505,7 @@ func (c *client) pullOne(source, target string) error {
 		source = strings.TrimSuffix(source, "/")
 		return c.pullDir(source, target)
 	}
-	b, _, err := c.run("cat " + source)
+	b, _, err := c.run("cat", source)
 	if err != nil {
 		return err
 	}
@@ -513,7 +513,7 @@ func (c *client) pullOne(source, target string) error {
 }
 
 func (c *client) pullDir(source, target string) error {
-	b, _, err := c.run("find " + source)
+	b, _, err := c.run("find", source)
 	if err != nil {
 		return err
 	}
@@ -543,7 +543,7 @@ func (c *client) status(args []string) error {
 	if err != nil {
 		return err
 	}
-	stdout, stderr, err := c.run("docker exec acroboxd acroboxd status")
+	stdout, stderr, err := c.run("docker", "exec", "acroboxd", "acroboxd", "status")
 	if err != nil {
 		c.cli.Errorf("%s\n", stderr)
 		return cli.ErrExitFailure
@@ -609,11 +609,13 @@ func (c *client) databaseInfo(args []string) error {
 }
 
 func (c *client) psql(args []string) error {
-	return c.exec("docker exec -i -t -u postgres postgres psql", args)
+	args = append([]string{"exec", "-i", "-t", "-u", "postgres", "postgres", "psql"}, args...)
+	return c.exec("docker", args...)
 }
 
 func (c *client) redisCLI(args []string) error {
-	return c.exec("docker exec -i -t -u redis redis redis-cli", args)
+	args = append([]string{"exec", "-i", "-t", "-u", "redis", "redis", "redis-cli"}, args...)
+	return c.exec("docker", args...)
 }
 
 func (c *client) deploy(args []string) error {
@@ -640,7 +642,7 @@ func (c *client) deploy(args []string) error {
 	}
 	base := filepath.Base(local)
 	remote := filepath.Join("/tmp", base)
-	_, stderr, err := c.run("docker load -i " + remote + " && rm " + remote)
+	_, stderr, err := c.run("sh", "-c", "docker load -i "+remote+" && rm "+remote)
 	if err != nil {
 		c.cli.Errorf("%s\n", stderr)
 		return err
@@ -649,7 +651,8 @@ func (c *client) deploy(args []string) error {
 }
 
 func (c *client) logs(args []string) error {
-	return c.exec("docker logs", args)
+	args = append([]string{"logs"}, args...)
+	return c.exec("docker", args...)
 }
 
 func (c *client) step(level int, format string, args ...interface{}) {

@@ -43,11 +43,11 @@ func (c *client) newSession() (*ssh.Session, error) {
 	return s.NewSession()
 }
 
-func (c *client) run(command string) ([]byte, []byte, error) {
-	return c.runWithStdin(nil, command)
+func (c *client) run(command string, args ...string) ([]byte, []byte, error) {
+	return c.runWithStdin(nil, command, args...)
 }
 
-func (c *client) runWithStdin(stdin io.Reader, command string) ([]byte, []byte, error) {
+func (c *client) runWithStdin(stdin io.Reader, command string, args ...string) ([]byte, []byte, error) {
 	session, err := c.newSession()
 	if err != nil {
 		return nil, nil, err
@@ -58,14 +58,14 @@ func (c *client) runWithStdin(stdin io.Reader, command string) ([]byte, []byte, 
 	session.Stdin = stdin
 	session.Stdout = &stdout
 	session.Stderr = &stderr
-	err = session.Run(command)
+	err = session.Run(quote(command, args...))
 	if err != nil {
 		return nil, nil, err
 	}
 	return stdout.Bytes(), stderr.Bytes(), nil
 }
 
-func (c *client) exec(command string, args []string) error {
+func (c *client) exec(command string, args ...string) error {
 	session, err := c.newSession()
 	if err != nil {
 		return err
@@ -98,30 +98,37 @@ func (c *client) exec(command string, args []string) error {
 			}
 		}
 	}
-	// Arguments will have already been processed by the shell
-	// before they are interpreted by abx. We need to re-quote
-	// the arguments for the remote shell to interpret them as
-	// they were initially passed. For example:
-	//
-	//   $ abx env/set image key="value with spaces"
-	//
-	// This args slice will contain the string "key=value with spaces"
-	// but if proxying the command directly to the remote server then
-	// it would only see "key=value" and then bail out attempting to
-	// process the next key/value pair.
-	for i, arg := range args {
-		args[i] = "'" + strings.ReplaceAll(arg, "'", "'\"'\"'") + "'"
-	}
-	command = command + " " + strings.Join(args, " ")
-	command = strings.TrimSpace(command) + "\n"
-	return session.Run(command)
+	return session.Run(quote(command, args...))
 }
 
 func (c *client) acroboxd(command string, args []string) error {
-	err := c.exec("docker exec -i -t acroboxd acroboxd "+command, args)
+	args = append([]string{"exec", "-i", "-t", "acroboxd", "acroboxd", command}, args...)
+	err := c.exec("docker", args...)
 	_, ok := err.(*ssh.ExitError)
 	if ok {
 		return cli.ErrExitFailure
 	}
 	return err
+}
+
+// quote returns a quoted command string suitible for session.Run.
+//
+// Arguments will have already been processed by the shell
+// before they are interpreted by abx. We need to re-quote
+// the arguments for the remote shell to interpret them as
+// they were initially passed. For example:
+//
+//   $ abx env/set image key="value with spaces"
+//
+// This args slice will contain the string "key=value with spaces"
+// but if proxying the command directly to the remote server then
+// it would only see "key=value" and then bail out attempting to
+// process the next key/value pair.
+func quote(command string, args ...string) string {
+	for i, arg := range args {
+		args[i] = "'" + strings.ReplaceAll(arg, "'", "'\"'\"'") + "'"
+	}
+	command = command + " " + strings.Join(args, " ")
+	command = strings.TrimSpace(command)
+	return command
 }
