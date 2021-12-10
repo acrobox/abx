@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"golang.org/x/crypto/ssh"
+
 	"acrobox.io/abx/cli"
 )
 
@@ -26,6 +28,12 @@ func main() {
 	}
 	err := cli.Run(config)
 	if err != nil {
+		serr, ok := err.(*ssh.ExitError)
+		if ok {
+			status := serr.ExitStatus()
+			os.Exit(status)
+			return
+		}
 		os.Exit(1)
 	}
 }

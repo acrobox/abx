@@ -10,8 +10,6 @@ import (
 
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/terminal"
-
-	"github.com/pnelson/cli"
 )
 
 const term = "xterm-256color"
@@ -103,12 +101,7 @@ func (c *client) exec(command string, args ...string) error {
 
 func (c *client) acroboxd(command string, args []string) error {
 	args = append([]string{"exec", "-i", "-t", "acroboxd", "acroboxd", command}, args...)
-	err := c.exec("docker", args...)
-	_, ok := err.(*ssh.ExitError)
-	if ok {
-		return cli.ErrExitFailure
-	}
-	return err
+	return c.exec("docker", args...)
 }
 
 // quote returns a quoted command string suitible for session.Run.

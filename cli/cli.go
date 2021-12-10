@@ -697,15 +697,17 @@ func (c *client) promptToAgree() error {
 }
 
 func (c *client) resolver(err error) {
-	perr, ok := err.(*fs.PathError)
-	if ok {
+	switch e := err.(type) {
+	case *fs.PathError:
 		prefix := filepath.Join(c.config.Home, c.flags.host)
-		if strings.HasPrefix(perr.Path, prefix) {
+		if strings.HasPrefix(e.Path, prefix) {
 			c.cli.Errorf("Machine '%s' does not exist.\n", prefix)
-			return
 		}
+	case *ssh.ExitError:
+		// no-op
+	default:
+		c.cli.Errorf("%v\n", err)
 	}
-	c.cli.Errorf("%v\n", err)
 }
 
 func formatTime(t time.Time) string {
