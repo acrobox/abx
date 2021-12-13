@@ -30,7 +30,7 @@ $ abx init
 • Acrobox is ready.
 ```
 
-See `abx` documentation for more details including important information about
+See `abx help` for more details including important information about
 retaining long term access to your machine.
 
 At this point, you will require access to modify the DNS records for at least
@@ -58,28 +58,80 @@ These records may take a while to fully propagate across the internet. You can
 do a quick check by running `dig +short example.com` replacing `example.com`
 with your domain optionally including subdomain.
 
-Configure a new container from the `hello-sigterm` image named and referred to
-from other containers as `demo` and exposed at `example.com`. The hostname,
-container name, and image name could have all been `example.com`. Different
-names were chosen for clarity.
+Configure a new container from the `hello-kitchen-sink` image named and
+referred to from other containers as `demo` and exposed at `example.com`.
+The hostname, container name, and image name could have all been `example.com`.
+Different names were chosen for clarity.
 
 ```sh
-$ abx add -s example.com demo hello-sigterm
+$ abx add -s example.com demo hello-kitchen-sink
 ```
 
-Build and deploy the `hello-sigterm` project or use one of your own.
+Build the `hello-kitchen-sink` project.
 
 ```sh
-$ git clone https://github.com/acrobox/hello-sigterm.git
-$ cd hello-sigterm
-$ docker build -t hello-sigterm .
-$ abx deploy hello-sigterm
+$ git clone https://github.com/acrobox/hello-kitchen-sink.git
+$ cd hello-kitchen-sink
+$ docker build -t hello-kitchen-sink .
 ```
 
-If everything went as expected, you should have a working app!
+We should create the database before the first deploy. This application doesn't
+require a database on boot but many applications do.
 
-New applications are ready to connect to PostgreSQL and/or Redis.
-See `abx help postgresql` and `abx help redis` for more information.
+```sh
+$ abx db/create hello-kitchen-sink
+$ abx psql -U acrobox -c 'CREATE TABLE data ( id SERIAL PRIMARY KEY )' hello-kitchen-sink
+```
 
-Many applications require background tasks to be run.
+Now we're ready to deploy.
+
+```sh
+$ abx deploy hello-kitchen-sink
+```
+
+If everything went as expected, you should have a working app! This very basic
+application prints the current value from a Redis key and the number of records
+in a Postgres table, or plain text errors if encountered.
+
+```sh
+$ curl https://example.com
+0
+0
+```
+
+The response will always be the same. We can remedy this by adding a task to
+increment a Redis key value and another task to add a record in a Postgres
+table.
+
+```sh
+$ abx add -t "every 10 seconds" demo-incr hello-kitchen-sink incr
+$ abx add -t "every 15 seconds" demo-touch hello-kitchen-sink touch
+```
+
 See `abx help add` and `abx help tasks` for more information.
+
+Now if we wait some time, we can see that background tasks are running.
+
+```sh
+$ curl https://example.com
+2
+3
+```
+
+If the counts are getting too high for our liking, we can trigger a reset.
+
+```sh
+$ abx reload demo
+```
+
+Now that we have a general idea of the `abx` workflow, we can clean up
+everything we created and move on to other projects.
+
+```sh
+$ abx remove demo
+$ abx remove demo-incr
+$ abx remove demo-touch
+$ abx db/destroy hello-kitchen-sink
+$ abx redis-cli del hello-kitchen-sink
+$ abx ssh docker rmi hello-kitchen-sink
+```

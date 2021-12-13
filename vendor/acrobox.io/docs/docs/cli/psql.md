@@ -12,11 +12,19 @@ https://www.postgresql.org/docs/current/app-psql.html
 Query from the `example` database:
 
 ```sh
-$ abx psql -c 'SELECT col FROM tablename;' example
+$ abx psql -c 'SELECT col FROM tablename' example
 ```
 
 Enable the `citext` extension on the `example` database:
 
 ```sh
-$ abx psql -U postgres -c 'CREATE EXTENSION "citext"' example
+$ abx psql -c 'CREATE EXTENSION "citext"' example
+```
+
+The `psql` command is run as the `postgres` user internally. If you need to run
+something as the user that owns the database created by `db/create` then use
+the `psql` flag `-U acrobox`:
+
+```sh
+$ abx psql -U acrobox -c 'CREATE TABLE data ( id SERIAL PRIMARY KEY )' example
 ```
