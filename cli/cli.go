@@ -55,9 +55,6 @@ const cardAuthText = "  I authorize Acrobox to send instructions to the financia
 	"  institution that issued my card to take payments from my card\n" +
 	"  account in accordance with the terms of my agreement with you.\n"
 
-// keySize represents the key pair size in bits.
-const keySize = 4096
-
 const (
 	colorINF = 34
 	colorWRN = 33
