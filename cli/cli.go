@@ -138,6 +138,7 @@ func Run(config *Config) error {
 	// Containers
 	c.cli.Add("deploy", c.deploy, nil, cli.Proxy())
 	c.cli.Add("logs", c.logs, nil, cli.Proxy())
+	c.cli.Add("exec", c.exec, nil)
 	commands = []string{
 		"add",
 		"remove",
@@ -676,6 +677,14 @@ func (c *client) deploy(args []string) error {
 
 func (c *client) logs(args []string) error {
 	args = append([]string{"logs"}, args...)
+	return c.runWithOutput("docker", args...)
+}
+
+func (c *client) exec(args []string) error {
+	if len(args) < 2 {
+		return cli.ErrUsage
+	}
+	args = append([]string{"exec", "-i", "-t", args[0], args[1]}, args[2:]...)
 	return c.runWithOutput("docker", args...)
 }
 

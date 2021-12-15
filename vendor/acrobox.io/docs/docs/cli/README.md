@@ -81,6 +81,8 @@ Errors yield a non-zero exit status.
 
 `run` runs a one-off non-scheduled task.
 
+`exec` runs a command in a running container.
+
 `stop` stops a container.
 
 `start` starts a stopped container.

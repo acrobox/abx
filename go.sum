@@ -1,5 +1,5 @@
-acrobox.io/docs v0.0.0-20211212111855-950770e2cc10 h1:11kPzZHDVEYdv7iyuil85sjYLv4wrAARxOhAvGIwgos=
-acrobox.io/docs v0.0.0-20211212111855-950770e2cc10/go.mod h1:C1cKG40HQvkrFTgVhnKqnCVxSQfuqsImbCXLsonvbiY=
+acrobox.io/docs v0.0.0-20211215013554-f59c1f15203d h1:dl19xfN2kQ63NhG/4kMPDj4HADINBi5AsAS2M1CAy5c=
+acrobox.io/docs v0.0.0-20211215013554-f59c1f15203d/go.mod h1:C1cKG40HQvkrFTgVhnKqnCVxSQfuqsImbCXLsonvbiY=
 github.com/pnelson/cli v0.0.0-20211031084837-a538676e703b h1:pRxJ5g49Bh9UXqPczQrarN/vBj4TF4aZtRCq6uu3Q0A=
 github.com/pnelson/cli v0.0.0-20211031084837-a538676e703b/go.mod h1:Id+iPj/Q+WzST9HqFs7/3mRTOsmqZD2chWepF6XEh88=
 golang.org/x/crypto v0.0.0-20211209193657-4570a0811e8b h1:QAqMVf3pSa6eeTsuklijukjXBlj7Es2QQplab+/RbQ4=
