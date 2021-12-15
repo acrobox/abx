@@ -431,7 +431,6 @@ func (c *client) pushOne(source, target string, targetIsDir bool) error {
 		source = strings.TrimSuffix(source, "/")
 		return c.pushDir(source, target)
 	}
-
 	filename := target
 	if targetIsDir {
 		filename = filepath.Join(target, fi.Name())
