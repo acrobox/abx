@@ -63,7 +63,7 @@ func (c *client) runWithStdin(stdin io.Reader, command string, args ...string) (
 	return stdout.Bytes(), stderr.Bytes(), nil
 }
 
-func (c *client) exec(command string, args ...string) error {
+func (c *client) runWithOutput(command string, args ...string) error {
 	session, err := c.newSession()
 	if err != nil {
 		return err
@@ -101,7 +101,7 @@ func (c *client) exec(command string, args ...string) error {
 
 func (c *client) acroboxd(command string, args []string) error {
 	args = append([]string{"exec", "-i", "-t", "acroboxd", "acroboxd", command}, args...)
-	return c.exec("docker", args...)
+	return c.runWithOutput("docker", args...)
 }
 
 // quote returns a quoted command string suitible for session.Run.

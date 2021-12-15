@@ -339,7 +339,7 @@ func (c *client) destroy(args []string) error {
 
 func (c *client) ssh(args []string) error {
 	if len(args) > 0 {
-		return c.exec(args[0], args[1:]...)
+		return c.runWithOutput(args[0], args[1:]...)
 	}
 	session, err := c.newSession()
 	if err != nil {
@@ -609,12 +609,12 @@ func (c *client) databaseInfo(args []string) error {
 
 func (c *client) psql(args []string) error {
 	args = append([]string{"exec", "-i", "-t", "-u", "postgres", "postgres", "psql"}, args...)
-	return c.exec("docker", args...)
+	return c.runWithOutput("docker", args...)
 }
 
 func (c *client) redisCLI(args []string) error {
 	args = append([]string{"exec", "-i", "-t", "-u", "redis", "redis", "redis-cli"}, args...)
-	return c.exec("docker", args...)
+	return c.runWithOutput("docker", args...)
 }
 
 func (c *client) restore(args []string) error {
@@ -639,7 +639,7 @@ func (c *client) restore(args []string) error {
 		return err
 	}
 	containerID := strings.TrimSpace(string(data["container_id"]))
-	return c.exec("docker", "logs", "-f", containerID)
+	return c.runWithOutput("docker", "logs", "-f", containerID)
 }
 
 func (c *client) deploy(args []string) error {
@@ -676,7 +676,7 @@ func (c *client) deploy(args []string) error {
 
 func (c *client) logs(args []string) error {
 	args = append([]string{"logs"}, args...)
-	return c.exec("docker", args...)
+	return c.runWithOutput("docker", args...)
 }
 
 func (c *client) step(level int, format string, args ...interface{}) {
