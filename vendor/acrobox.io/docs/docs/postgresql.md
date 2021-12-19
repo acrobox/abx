@@ -29,9 +29,27 @@ or commands from the command line.
 External connections can be made through a PostgreSQL client that supports SSH
 key authentication. See the output from `abx db/info` for connection details.
 
+## Configuration
+
+### Server
+
+Alter server configuration at `/acrobox/postgres/postgresql.conf` as required.
+
+See the PostgreSQL documentation for more information.
+
+https://www.postgresql.org/docs/14/runtime-config.html
+
+### psql
+
+Alter `psql` configuration at `/acrobox/postgres/psqlrc` as required.
+
+See the PostgreSQL documentation for more information.
+
+https://www.postgresql.org/docs/current/app-psql.html
+
 ## Backups
 
-Daily database dumps to `/acrobox/postgres/DATABASE.dump` are enabled by
+Daily database dumps to `/acrobox/postgres/backups/NAME.dump` are enabled by
 default. It is recommended to enable encrypted offsite backups. See `abx help
 backups` for more information.
 

@@ -11,4 +11,4 @@ https://www.postgresql.org/docs/current/app-pgdump.html
 
 ## Options
 
-`-file` to specify the archive file. Defaults to `/data/postgres/NAME.dump`.
+`-file` to specify the archive file. Defaults to `/data/postgres/backups/NAME.dump`.

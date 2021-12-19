@@ -13,8 +13,13 @@ this file is not recommended.
 
 The provided `NAME` is normalized to a valid container name beginning with an
 alphanumeric character and followed by one or more alphanumeric characters,
-underscores, periods, or hyphens. The name must be unique. See `abx status` for
-a list of configured containers.
+underscores, periods, or hyphens. The name must be unique.
+
+Containers can resolve to each other by the chosen `NAME`. It may be convenient
+to name a container after the domain name they publicly resolve to but it may
+raise issues when connecting from other containers.
+
+See `abx status` for a list of configured containers.
 
 The configuration applies to the most recently deployed `IMAGE` so that the
 service, site, or task only needs to be configured once. Image tags are

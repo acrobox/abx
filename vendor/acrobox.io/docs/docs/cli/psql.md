@@ -28,3 +28,9 @@ the `psql` flag `-U acrobox`:
 ```sh
 $ abx psql -U acrobox -c 'CREATE TABLE data ( id SERIAL PRIMARY KEY )' example
 ```
+
+Export table `data` from the `example` database as a CSV document to `stdout`:
+
+```sh
+$ abx psql -c 'SELECT * FROM data' --csv example
+```

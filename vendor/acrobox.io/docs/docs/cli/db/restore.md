@@ -16,6 +16,6 @@ https://www.postgresql.org/docs/current/app-pgrestore.html
 
 ## Options
 
-`-file` to specify the archive file. Defaults to `/data/postgres/NAME.dump`.
+`-file` to specify the archive file. Defaults to `/data/postgres/backups/NAME.dump`.
 
 `-f` or `-force` to skip the confirmation prompt.

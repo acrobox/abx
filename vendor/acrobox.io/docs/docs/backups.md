@@ -8,7 +8,7 @@ deduplicated, incremental, and encrypted cloud storage backups.
 
 The backup procedure runs as follows:
 
-- All PostgreSQL databases are dumped to `/acrobox/postgres/DATABASE.dump`.
+- All PostgreSQL databases are dumped to `/acrobox/postgres/backups/NAME.dump`.
 - `/acrobox/backup.sh` is executed if it exists.
 - The entire `/acrobox` directory is backed up via restic if configured.
 
@@ -81,5 +81,5 @@ Download the PostgreSQL database dump for the `example` database:
 
 ```sh
 $ restic restore latest --target /tmp/acrobox \
-  --path /acrobox/postgres/example.dump
+  --path /acrobox/postgres/backups/example.dump
 ```
