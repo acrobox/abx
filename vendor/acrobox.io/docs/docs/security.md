@@ -12,7 +12,7 @@ DigitalOcean. Ideally, all three of these should be separate entities.
 
 ## Connectivity
 
-Connectivity is made through a hardened SSH server. A new RSA key pair is
+Connectivity is made through a hardened SSH server. A new Ed25519 key pair is
 created for each machine and the SSH server has been configured to only allow
 non-root public key connections. Strict host key verification is enforced for
 all connections.
