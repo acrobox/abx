@@ -51,9 +51,7 @@ const username = "acrobox"
 
 // cardAuthText is the authorization text to be displayed for
 // any action that may initiate a Stripe payment transaction.
-const cardAuthText = "  I authorize Acrobox to send instructions to the financial\n" +
-	"  institution that issued my card to take payments from my card\n" +
-	"  account in accordance with the terms of my agreement with you.\n"
+const cardAuthText = "  I authorize Acrobox to charge my card in accordance with the terms of service.\n"
 
 const (
 	colorINF = 34
