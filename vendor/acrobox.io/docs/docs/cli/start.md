@@ -2,6 +2,11 @@
 
 Usage: `abx start NAME`
 
+Start a stopped container.
+
+The container `NAME` must have been configured through `abx add`. Container
+names `postgres` and `redis` are also supported.
+
 Services and sites are run as daemons and will be automatically restarted
 unless manually stopped. Tasks are run as one-off tasks and will not run if the
 previous invocation is still running.

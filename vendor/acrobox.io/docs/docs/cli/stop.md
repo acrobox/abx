@@ -2,10 +2,14 @@
 
 Usage: `abx stop [OPTIONS] NAME`
 
-Send a `SIGTERM` signal to the container. It is the responsibility of the
-application to handle the signal. The intended use is to trigger a graceful
-stop. If the application doesn't stop before the grace period, a `SIGKILL`
-signal is sent to force kill the container.
+Send a `SIGTERM` signal to the container.
+
+The container `NAME` must have been configured through `abx add`. Container
+names `postgres` and `redis` are also supported.
+
+It is the responsibility of the application to handle the signal. The intended
+use is to trigger a graceful stop. If the application doesn't stop before the
+grace period, a `SIGKILL` signal is sent to force kill the container.
 
 ## Options
 
