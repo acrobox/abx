@@ -26,7 +26,6 @@ type flagsInit struct {
 	DataSize    int    `json:"data_size"`    // default 1GB
 	PublicKey   string `json:"public_key"`   // ssh authorized key
 	AccessToken string `json:"access_token"` // $DIGITALOCEAN_ACCESS_TOKEN
-	fullYear    bool
 	force       bool
 }
 

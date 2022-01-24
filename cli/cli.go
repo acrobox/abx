@@ -93,7 +93,6 @@ func Run(config *Config) error {
 		cli.NewFlag("data-size", &c.flags.init.DataSize, cli.Kind(flagInt{}), cli.DefaultValue("1"), cli.ShortFlag("d")),
 		cli.NewFlag("digitalocean-access-token", &c.flags.init.AccessToken, cli.EnvironmentKey("DIGITALOCEAN_ACCESS_TOKEN")),
 		cli.NewFlag("token", &c.flags.auth),
-		cli.NewFlag("full-year-discount", &c.flags.init.fullYear, cli.Bool()),
 		cli.NewFlag("force", &c.flags.init.force, cli.Bool(), cli.ShortFlag("f")),
 	})
 	c.cli.Add("cancel", c.cancel, []*cli.Flag{
@@ -181,13 +180,9 @@ func (c *client) init(args []string) error {
 		c.step(colorERR, "%v", err)
 		return cli.ErrExitFailure
 	}
+	c.flags.init.Product = "Indie Hacker"
 	c.flags.init.Name = c.flags.host
 	c.flags.init.PublicKey = string(authorizedKey)
-	if c.flags.init.fullYear {
-		c.flags.init.Product = "Indie Hacker (yearly)"
-	} else {
-		c.flags.init.Product = "Indie Hacker (monthly)"
-	}
 	if !c.flags.init.force {
 		c.step(colorWRN, "Payment authorization required.")
 		c.cli.Printf(cardAuthText)
