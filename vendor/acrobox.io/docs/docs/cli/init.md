@@ -42,9 +42,8 @@ manual URL entry.
 View system resources, recent deploys, and monitor deployed sites and services
 without committing additional time and resources until you're ready.
 
-By initializing a new machine, you authorize Acrobox to send instructions to
-the financial institution that issued your card to take payments from your card
-account in accordance with the terms of agreement.
+By initializing a new machine, you authorize Acrobox to charge your card in
+accordance with the terms of service.
 
 See `abx help legal` for details.
 
