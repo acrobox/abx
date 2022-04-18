@@ -30,13 +30,14 @@ If you have any questions, please reach out to hello@acrobox.io.
     valid referral link from an existing customer.
   - You will receive a monthly $1 USD discount for every customer that signed
     up using your referral link and has one or more active subscriptions older
-    than 7 days at the time of billing.
+    than 7 days at the time of invoicing.
 2. Acrobox is not responsible for any additional fees charged to your card
    account by third party providers. The machine defaults will cost you an
    additional $6.10 USD per month payable to DigitalOcean.
-3. Service cancellations made within 7 days of billing will be automatically
-   refunded but service will be disabled immediately. Cancellations made
-   thereafter will maintain service until the end of the billing period.
+3. Service cancellations made within 7 days of the invoice date will be
+   automatically refunded and service will be disabled immediately. Service
+   cancellations made thereafter will maintain service until the end of the
+   billing period without a refund.
 4. If the pricing structure is to change, you will receive advanced notice.
 
 ### Past Due and Suspended Accounts
