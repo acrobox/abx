@@ -14,6 +14,7 @@ type flags struct {
 	renew   flagsRenew
 	destroy flagsDestroy
 	status  flagsStatus
+	metrics flagsMetrics
 	restore flagsRestore
 }
 
@@ -47,6 +48,11 @@ type flagsDestroy struct {
 
 // flagsStatus represents the flags for machine status.
 type flagsStatus struct {
+	format string
+}
+
+// flagsMetrics represents the flags for metrics.
+type flagsMetrics struct {
 	format string
 }
 

@@ -37,7 +37,7 @@ Alter server configuration at `/acrobox/postgres/postgresql.conf` as required.
 
 See the PostgreSQL documentation for more information.
 
-https://www.postgresql.org/docs/14/runtime-config.html
+https://www.postgresql.org/docs/current/runtime-config.html
 
 ### psql
 

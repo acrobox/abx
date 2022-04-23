@@ -114,6 +114,9 @@ func Run(config *Config) error {
 	c.cli.Add("status", c.status, []*cli.Flag{
 		cli.NewFlag("format", &c.flags.status.format, cli.DefaultValue("term"), cli.ShortFlag("f")),
 	})
+	c.cli.Add("metrics", c.metrics, []*cli.Flag{
+		cli.NewFlag("format", &c.flags.metrics.format, cli.DefaultValue("term"), cli.ShortFlag("f")),
+	})
 	c.cli.Add("db/info", c.databaseInfo, nil)
 	c.cli.Add("psql", c.psql, nil, cli.Proxy())
 	c.cli.Add("redis-cli", c.redisCLI, nil, cli.Proxy())
@@ -561,11 +564,29 @@ func (c *client) status(args []string) error {
 	c.cli.Printf("  Booted At:  %s%s\n", formatTime(data.SystemBootedAt), formatDuration(data.SystemBootedAt, now))
 	c.cli.Printf("  Started At: %s%s\n", formatTime(data.AcroboxStartedAt), formatDuration(data.AcroboxStartedAt, now))
 	c.cli.Printf("\n")
-	if !data.LicenseUpdatedAt.IsZero() {
-		c.cli.Printf("License\n")
-		c.cli.Printf("  Updated At: %s%s\n", formatTime(data.LicenseUpdatedAt), formatDuration(data.LicenseUpdatedAt, now))
+	c.cli.Printf("Memory\n")
+	c.cli.Printf("  Go Routines: %d\n", data.MemStatsGoRoutines)
+	c.cli.Printf("  Total: %d bytes\n", data.MemStatsMemoryTotal)
+	c.cli.Printf("  Alloc: %d bytes\n", data.MemStatsMemoryAlloc)
+	c.cli.Printf("  Count: %d\n", data.MemStatsMemoryCount)
+	c.cli.Printf("\n")
+	c.cli.Printf("Requests\n")
+	c.cli.Printf("  Rate:   %d req/s", data.ProxyRequestsPerSec)
+	if data.ProxyRequestsPerSecPeak > 0 {
+		c.cli.Printf(" (peak %d at %v)\n", data.ProxyRequestsPerSecPeak, formatTime(data.ProxyRequestsPerSecPeakAt))
+	} else {
 		c.cli.Printf("\n")
 	}
+	c.cli.Printf("  Active: %d", data.ProxyActiveRequests)
+	if data.ProxyActiveRequestsPeak > 0 {
+		c.cli.Printf(" (peak %d at %v)\n", data.ProxyActiveRequestsPeak, formatTime(data.ProxyActiveRequestsPeakAt))
+	} else {
+		c.cli.Printf("\n")
+	}
+	c.cli.Printf("\n")
+	c.cli.Printf("Latency p99 (window=10m interval=10s)\n")
+	c.formatLatency(data.ProxyLatencyP99, 10)
+	c.cli.Printf("\n")
 	c.cli.Printf("Backups\n")
 	c.cli.Printf("  Next: %s%s\n", formatTime(data.NextBackupAt), formatDuration(data.NextBackupAt, now))
 	if !data.LastBackupAt.IsZero() {
@@ -578,6 +599,66 @@ func (c *client) status(args []string) error {
 		c.cli.Printf("  Last: %s (took %s)\n", formatTime(data.LastUpdateAt), data.LastUpdateTook)
 	}
 	c.cli.Printf("\n")
+	if !data.LicenseUpdatedAt.IsZero() {
+		c.cli.Printf("License\n")
+		c.cli.Printf("  Updated At: %s%s\n", formatTime(data.LicenseUpdatedAt), formatDuration(data.LicenseUpdatedAt, now))
+		c.cli.Printf("\n")
+	}
+	return nil
+}
+
+func (c *client) formatLatency(vs []float64, height int) {
+	max := 0
+	for _, n := range vs {
+		if int(n) > max {
+			max = int(n)
+		}
+	}
+	ys := make([]int, len(vs))
+	if max != 0 {
+		for i, v := range vs {
+			ys[i] = (int(v)*height + max/2) / max
+		}
+	}
+	for h := height; h > 0; h-- {
+		s := ""
+		for i := range vs {
+			if ys[i] >= h {
+				s += "█"
+			} else {
+				s += " "
+			}
+		}
+		if h == height {
+			c.cli.Printf("  %s %d ms\n", s, max)
+		} else {
+			c.cli.Printf("  %s\n", s)
+		}
+	}
+}
+
+func (c *client) metrics(args []string) error {
+	if len(args) > 0 {
+		return cli.ErrUsage
+	}
+	stdout, stderr, err := c.run("docker", "exec", "acroboxd", "acroboxd", "metrics")
+	if err != nil {
+		c.cli.Errorf("%s\n", stderr)
+		return cli.ErrExitFailure
+	}
+	data := make(map[string]interface{})
+	err = json.Unmarshal(stdout, &data)
+	if err != nil {
+		return err
+	}
+	switch c.flags.metrics.format {
+	case "term":
+		return fmt.Errorf("Format 'term' not implemented.")
+	case "json":
+		return json.NewEncoder(c.config.Stdout).Encode(data)
+	default:
+		return fmt.Errorf("Format must be 'term' or 'json'.")
+	}
 	return nil
 }
 

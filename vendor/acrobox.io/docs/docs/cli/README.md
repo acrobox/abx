@@ -43,6 +43,8 @@ Errors yield a non-zero exit status.
 
 `status` displays machine status information.
 
+`metrics` displays a snapshot of the metrics captured in memory.
+
 `db/info` prints database connection information.
 
 `db/list` displays configured databases.
