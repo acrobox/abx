@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -505,7 +504,7 @@ func (c *client) pullOne(source, target string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(target, b, 0640)
+	return os.WriteFile(target, b, 0640)
 }
 
 func (c *client) pullDir(source, target string) error {

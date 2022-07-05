@@ -4,7 +4,6 @@ import (
 	"crypto/ed25519"
 	"crypto/rand"
 	"errors"
-	"io/ioutil"
 	"net"
 	"os"
 	"path/filepath"
@@ -69,7 +68,7 @@ func (c *client) waitForService() error {
 
 func (c *client) writeBytes(name string, b []byte, perm os.FileMode) error {
 	filename := filepath.Join(c.config.Home, c.flags.host, name)
-	return ioutil.WriteFile(filename, b, perm)
+	return os.WriteFile(filename, b, perm)
 }
 
 func (c *client) writeKey(name string, b []byte) error {
@@ -97,7 +96,7 @@ func (c *client) getKnownHosts() (ssh.HostKeyCallback, error) {
 
 func (c *client) getPrivateKey() (ssh.Signer, error) {
 	filename := filepath.Join(c.config.Home, c.flags.host, "id_ed25519")
-	b, err := ioutil.ReadFile(filename)
+	b, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +124,7 @@ func newKeyPair() ([]byte, []byte, error) {
 
 // getString returns a space-trimmed string from the filename.
 func getString(filename string) (string, error) {
-	b, err := ioutil.ReadFile(filename)
+	b, err := os.ReadFile(filename)
 	if err != nil {
 		return "", err
 	}

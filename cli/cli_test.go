@@ -2,7 +2,7 @@ package cli
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -33,8 +33,8 @@ func TestInit(t *testing.T) {
 	config := &Config{
 		Args:   []string{"abx", "-addr", ts.URL, "-port", port, "init", "-force"},
 		Home:   home,
-		Stdout: ioutil.Discard,
-		Stderr: ioutil.Discard,
+		Stdout: io.Discard,
+		Stderr: io.Discard,
 	}
 	err := Run(config)
 	if err != nil {
@@ -68,8 +68,8 @@ func TestInitErr(t *testing.T) {
 	config := &Config{
 		Args:   []string{"abx", "-addr", ts.URL, "init", "-force"},
 		Home:   t.TempDir(),
-		Stdout: ioutil.Discard,
-		Stderr: ioutil.Discard,
+		Stdout: io.Discard,
+		Stderr: io.Discard,
 	}
 	err := Run(config)
 	if err != cli.ErrExitFailure {
